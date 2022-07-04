@@ -1,2 +1,2 @@
 # dockerfiles
-Mono-repo with various Docekrfiles 
+Mono-repo with various Dockerfiles.
