@@ -25,9 +25,7 @@ lint: ## Run linters
 	@docker run \
 		-it \
 		--rm \
-		-e LOG_LEVEL="NOTICE" \
 		-e RUN_LOCAL="true" \
-		-e USE_FIND_ALGORITHM="true" \
 		-e IGNORE_GITIGNORED_FILES="true" \
 		-v "${PWD}":"/tmp/lint" \
 		ghcr.io/github/super-linter:slim-v4
