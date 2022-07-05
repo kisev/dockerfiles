@@ -1,0 +1,44 @@
+---
+stages:
+  - lint
+  - build-1
+
+default:
+  interruptible: true
+
+.kaniko:
+  image:
+    name: gcr.io/kaniko-project/executor:v1.8.1-debug
+    entrypoint: [ "" ]
+  script:
+    - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"username\":\"${CI_REGISTRY_USER}\",\"password\":\"${CI_REGISTRY_PASSWORD}\"}}}" > /kaniko/.docker/config.json
+    - /kaniko/executor
+      --cache=true
+      ${KANIKO_EXTRA_ARGS}
+
+github-superliner/lint:
+  stage: lint
+  image:
+    name: github/super-linter:slim-v4
+    entrypoint: [ "" ]
+  variables:
+    RUN_LOCAL: "true"
+    IGNORE_GITIGNORED_FILES: "true"
+    DEFAULT_WORKSPACE: ${CI_PROJECT_DIR}
+    ANSIBLE_DIRECTORY: ${CI_PROJECT_DIR}
+    LINTER_RULES_PATH: ${CI_PROJECT_DIR}
+  script:
+    - /action/lib/linter.sh
+  artifacts:
+    untracked: true
+
+core/build:
+  stage: build-1
+  extends:
+    - .kaniko
+  resource_group: core
+  variables:
+    KANIKO_EXTRA_ARGS: |
+      --context core
+      --dockerfile core/Dockerfile
+      --destination ${CI_REGISTRY_IMAGE}/core:${CI_COMMIT_REF_SLUG}
