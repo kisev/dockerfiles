@@ -2,6 +2,7 @@
 stages:
   - lint
   - build-1
+  - build-2
 
 default:
   interruptible: true
@@ -15,6 +16,15 @@ default:
     - /kaniko/executor
       --cache=true
       ${KANIKO_EXTRA_ARGS}
+
+.golang:
+  resource_group: golang-${GOLANG_VERSION}
+  variables:
+    KANIKO_EXTRA_ARGS: |
+      --context golang
+      --dockerfile golang/Dockerfile
+      --destination ${CI_REGISTRY_IMAGE}/golang-${GOLANG_VERSION}:${CI_COMMIT_REF_SLUG}
+      --build-arg PARENT_TAG=${CI_COMMIT_REF_SLUG}
 
 github-superliner/lint:
   stage: lint
@@ -42,3 +52,19 @@ core/build:
       --context core
       --dockerfile core/Dockerfile
       --destination ${CI_REGISTRY_IMAGE}/core:${CI_COMMIT_REF_SLUG}
+
+golang-1.17/build:
+  stage: build-2
+  extends:
+    - .kaniko
+    - .golang
+  variables:
+    GOLANG_VERSION: "1.17"
+
+golang-1.18/build:
+  stage: build-2
+  extends:
+    - .kaniko
+    - .golang
+  variables:
+    GOLANG_VERSION: "1.18"
