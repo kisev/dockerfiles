@@ -22,6 +22,7 @@ RUN \
       tzdata \
       curl \
       gnupg \
+      xz-utils \
     && \
     rm -rf /var/lib/apt/lists/*
 
