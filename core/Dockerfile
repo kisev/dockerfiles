@@ -5,7 +5,8 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ENV DEBIAN_FRONTEND="noninteractive"
 
 # hadolint ignore=DL3008
-RUN echo " ---> Install required system packages" \
+RUN \
+    echo " ---> Install required system packages" \
     && \
     apt-get update \
     && \
@@ -32,7 +33,8 @@ ENV LANG="${LANG}"
 
 ARG CORE_DUMB_INIT_VERSION="1.2.5"
 ARG CORE_DUMB_INIT_SHA256SUM="e874b55f3279ca41415d290c512a7ba9d08f98041b28ae7c2acb19a545f1c4df"
-RUN echo " ---> Install dumb-init" \
+RUN \
+    echo " ---> Install dumb-init" \
     && \
     curl -SLO "https://github.com/Yelp/dumb-init/releases/download/v${CORE_DUMB_INIT_VERSION}/dumb-init_${CORE_DUMB_INIT_VERSION}_x86_64" \
     && \
@@ -46,7 +48,8 @@ RUN echo " ---> Install dumb-init" \
 
 ARG CORE_GOSU_VERSION="1.14"
 ARG CORE_GOSU_SHA256SUM="bd8be776e97ec2b911190a82d9ab3fa6c013ae6d3121eea3d0bfd5c82a0eaf8c"
-RUN echo " ---> Install gosu" \
+RUN \
+    echo " ---> Install gosu" \
     && \
     curl -SLO "https://github.com/tianon/gosu/releases/download/${CORE_GOSU_VERSION}/gosu-amd64" \
     && \
