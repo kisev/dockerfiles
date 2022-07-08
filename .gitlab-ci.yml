@@ -7,24 +7,40 @@ stages:
 default:
   interruptible: true
 
-.kaniko:
-  image:
-    name: gcr.io/kaniko-project/executor:v1.8.1-debug
-    entrypoint: [ "" ]
+.docker:
+  image: docker:20
+  services:
+    - name: docker:20-dind-rootless
+  variables:
+    DOCKER_HOST: tcp://docker:2376
+    # DOCKER_EXPERIMENTAL: 1
+    DOCKER_BUILDKIT: 1
+    DOCKER_TLS_VERIFY: 1
+    DOCKER_TLS_CERTDIR: /certs
+    DOCKER_CERT_PATH: ${DOCKER_TLS_CERTDIR}/client
+  before_script:
+    - docker info
+    - docker login -u gitlab-ci-token -p ${CI_BUILD_TOKEN} ${CI_REGISTRY}
+    - docker context create gitlab-context
+    - docker context ls
+    - docker buildx create --name gitlab-builder --use gitlab-context
+    - docker buildx inspect --bootstrap
   script:
-    - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"username\":\"${CI_REGISTRY_USER}\",\"password\":\"${CI_REGISTRY_PASSWORD}\"}}}" > /kaniko/.docker/config.json
-    - /kaniko/executor
-      --cache=true
-      ${KANIKO_EXTRA_ARGS}
+    - docker buildx build
+      --pull
+      --push
+      ${DOCKER_EXTRA_ARGS}
 
 .golang:
   resource_group: golang-${GOLANG_VERSION}
   variables:
-    KANIKO_EXTRA_ARGS: |
-      --context golang
-      --dockerfile golang/Dockerfile
-      --destination ${CI_REGISTRY_IMAGE}/golang-${GOLANG_VERSION}:${CI_COMMIT_REF_SLUG}
+    DOCKER_EXTRA_ARGS: |
+      golang
+      --file golang/Dockerfile
       --build-arg PARENT_TAG=${CI_COMMIT_REF_SLUG}
+      --tag ${CI_REGISTRY_IMAGE}/golang-${GOLANG_VERSION}:${CI_COMMIT_REF_SLUG}
+      --cache-from type=registry,ref=${CI_REGISTRY_IMAGE}/golang-${GOLANG_VERSION}-cache:${CI_COMMIT_REF_SLUG}
+      --cache-to type=registry,ref=${CI_REGISTRY_IMAGE}/golang-${GOLANG_VERSION}-cache:${CI_COMMIT_REF_SLUG},mode=max
 
 github-superliner/lint:
   stage: lint
@@ -45,18 +61,21 @@ github-superliner/lint:
 core/build:
   stage: build-1
   extends:
-    - .kaniko
+    - .docker
   resource_group: core
   variables:
-    KANIKO_EXTRA_ARGS: |
-      --context core
-      --dockerfile core/Dockerfile
-      --destination ${CI_REGISTRY_IMAGE}/core:${CI_COMMIT_REF_SLUG}
+    DOCKER_EXTRA_ARGS: |
+      core
+      --file core/Dockerfile
+      --build-arg PARENT_TAG=${CI_COMMIT_REF_SLUG}
+      --tag ${CI_REGISTRY_IMAGE}/core:${CI_COMMIT_REF_SLUG}
+      --cache-from type=registry,ref=${CI_REGISTRY_IMAGE}/core-cache:${CI_COMMIT_REF_SLUG}
+      --cache-to type=registry,ref=${CI_REGISTRY_IMAGE}/core-cache:${CI_COMMIT_REF_SLUG},mode=max
 
 golang-1.17/build:
   stage: build-2
   extends:
-    - .kaniko
+    - .docker
     - .golang
   variables:
     GOLANG_VERSION: "1.17"
@@ -64,7 +83,7 @@ golang-1.17/build:
 golang-1.18/build:
   stage: build-2
   extends:
-    - .kaniko
+    - .docker
     - .golang
   variables:
     GOLANG_VERSION: "1.18"
