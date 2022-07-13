@@ -22,9 +22,11 @@ MAKEFILE_SELF := $(lastword $(MAKEFILE_LIST))
 .PHONY: lint
 lint: ## Run linters
 	@$(MAKE) -f $(MAKEFILE_SELF) .func/help/target TARGET="$@"
+	@docker pull ghcr.io/github/super-linter:slim-v4
 	@docker run \
 		-it \
 		--rm \
+		-e LOG_LEVEL="NOTICE" \
 		-e RUN_LOCAL="true" \
 		-e IGNORE_GITIGNORED_FILES="true" \
 		-v "${PWD}":"/tmp/lint" \

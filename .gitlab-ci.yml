@@ -1,46 +1,15 @@
 ---
+include:
+  - local: .gitlab-ci.templates.yml
+
 stages:
   - lint
   - build-1
   - build-2
+  - build-3
 
 default:
   interruptible: true
-
-.docker:
-  image: docker:20
-  services:
-    - name: docker:20-dind-rootless
-  variables:
-    DOCKER_HOST: tcp://docker:2376
-    # DOCKER_EXPERIMENTAL: 1
-    DOCKER_BUILDKIT: 1
-    DOCKER_TLS_VERIFY: 1
-    DOCKER_TLS_CERTDIR: /certs
-    DOCKER_CERT_PATH: ${DOCKER_TLS_CERTDIR}/client
-  before_script:
-    - docker info
-    - docker login -u gitlab-ci-token -p ${CI_BUILD_TOKEN} ${CI_REGISTRY}
-    - docker context create gitlab-context
-    - docker context ls
-    - docker buildx create --name gitlab-builder --use gitlab-context
-    - docker buildx inspect --bootstrap
-  script:
-    - docker buildx build
-      --pull
-      --push
-      ${DOCKER_EXTRA_ARGS}
-
-.golang:
-  resource_group: golang-${GOLANG_VERSION}
-  variables:
-    DOCKER_EXTRA_ARGS: |
-      golang
-      --file golang/Dockerfile
-      --build-arg PARENT_TAG=${CI_COMMIT_REF_SLUG}
-      --tag ${CI_REGISTRY_IMAGE}/golang-${GOLANG_VERSION}:${CI_COMMIT_REF_SLUG}
-      --cache-from type=registry,ref=${CI_REGISTRY_IMAGE}/golang-${GOLANG_VERSION}-cache:${CI_COMMIT_REF_SLUG}
-      --cache-to type=registry,ref=${CI_REGISTRY_IMAGE}/golang-${GOLANG_VERSION}-cache:${CI_COMMIT_REF_SLUG},mode=max
 
 github-superliner/lint:
   stage: lint
@@ -72,18 +41,38 @@ core/build:
       --cache-from type=registry,ref=${CI_REGISTRY_IMAGE}/core-cache:${CI_COMMIT_REF_SLUG}
       --cache-to type=registry,ref=${CI_REGISTRY_IMAGE}/core-cache:${CI_COMMIT_REF_SLUG},mode=max
 
-golang-1.17/build:
+golang-1.17-minimal/build:
   stage: build-2
   extends:
     - .docker
-    - .golang
+    - .golang_minimal
   variables:
-    GOLANG_VERSION: "1.17"
+    GOLANG_SELECTOR: "17"
 
-golang-1.18/build:
+golang-1.18-minimal/build:
   stage: build-2
   extends:
     - .docker
-    - .golang
+    - .golang_minimal
   variables:
-    GOLANG_VERSION: "1.18"
+    GOLANG_SELECTOR: "18"
+
+golang-1.17-full/build:
+  stage: build-3
+  extends:
+    - .docker
+    - .golang_full
+  variables:
+    GOLANG_SELECTOR: "17"
+  needs:
+    - job: golang-1.17-minimal/build
+
+golang-1.18-full/build:
+  stage: build-3
+  extends:
+    - .docker
+    - .golang_full
+  variables:
+    GOLANG_SELECTOR: "18"
+  needs:
+    - job: golang-1.18-minimal/build

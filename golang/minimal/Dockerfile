@@ -1,0 +1,40 @@
+ARG PARENT_TAG
+FROM registry.gitlab.com/kisev/dockerfiles/core:${PARENT_TAG}
+
+ARG TARGETPLATFORM
+ARG TARGETOS
+ARG TARGETARCH
+ARG TARGETVARIANT
+ARG BUILDPLATFORM
+ARG BUILDOS
+ARG BUILDARCH
+ARG BUILDVARIANT
+
+SHELL ["/bin/bash", "-euo", "pipefail", "-c"]
+
+ENV GOPATH=/go
+ENV PATH=${PATH}:/usr/local/go/bin:${GOPATH}/bin
+
+ARG GOLANG_SELECTOR="18"
+ARG GOLANG_17_VERSION="1.17.12"
+ARG GOLANG_17_SHA256SUM_amd64="6e5203fbdcade4aa4331e441fd2e1db8444681a6a6c72886a37ddd11caa415d4"
+ARG GOLANG_17_SHA256SUM_arm64="74a4832d0f150a2d768a6781553494ba84152e854ebef743c4092cd9d1f66a9f"
+ARG GOLANG_18_VERSION="1.18.4"
+ARG GOLANG_18_SHA256SUM_amd64="c9b099b68d93f5c5c8a8844a89f8db07eaa58270e3a1e01804f17f4cf8df02f5"
+ARG GOLANG_18_SHA256SUM_arm64="35014d92b50d97da41dade965df7ebeb9a715da600206aa59ce1b2d05527421f"
+RUN <<-EOF
+    echo "Install golang"
+
+    export ARCH="${TARGETARCH}"
+    export SHA256SUM="GOLANG_${GOLANG_SELECTOR}_SHA256SUM_${ARCH}"
+    export GOLANG_VERSION="GOLANG_${GOLANG_SELECTOR}_VERSION"
+
+    curl -SLO "https://go.dev/dl/go${!GOLANG_VERSION}.linux-${ARCH}.tar.gz"
+    echo "Downloaded SHA256: $(sha256sum go${!GOLANG_VERSION}.linux-${ARCH}.tar.gz)"
+    echo "${!SHA256SUM} go${!GOLANG_VERSION}.linux-${ARCH}.tar.gz" | sha256sum -c -
+
+    tar -C /usr/local -xzf go${!GOLANG_VERSION}.linux-${ARCH}.tar.gz
+    rm -f go${!GOLANG_VERSION}.linux-${ARCH}.tar.gz
+
+    go version
+EOF
