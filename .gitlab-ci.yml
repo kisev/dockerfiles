@@ -41,6 +41,22 @@ core/build:
       --cache-from type=registry,ref=${CI_REGISTRY_IMAGE}/core-cache:${CI_COMMIT_REF_SLUG}
       --cache-to type=registry,ref=${CI_REGISTRY_IMAGE}/core-cache:${CI_COMMIT_REF_SLUG},mode=max
 
+nginx/build:
+  stage: build-2
+  extends:
+    - .docker
+  resource_group: nginx
+  variables:
+    DOCKER_EXTRA_ARGS: |
+      nginx
+      --file nginx/Dockerfile
+      --build-arg PARENT_TAG=${CI_COMMIT_REF_SLUG}
+      --tag ${CI_REGISTRY_IMAGE}/nginx:${CI_COMMIT_REF_SLUG}
+      --cache-from type=registry,ref=${CI_REGISTRY_IMAGE}/nginx-cache:${CI_COMMIT_REF_SLUG}
+      --cache-to type=registry,ref=${CI_REGISTRY_IMAGE}/nginx-cache:${CI_COMMIT_REF_SLUG},mode=max
+  needs:
+    - job: core/build
+
 golang-1.17-minimal/build:
   stage: build-2
   extends:
