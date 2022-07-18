@@ -18,6 +18,7 @@ github-superliner/lint:
     entrypoint: [ "" ]
   variables:
     RUN_LOCAL: "true"
+    VALIDATE_NATURAL_LANGUAGE: "false"
     IGNORE_GITIGNORED_FILES: "true"
     DEFAULT_WORKSPACE: ${CI_PROJECT_DIR}
     ANSIBLE_DIRECTORY: ${CI_PROJECT_DIR}
@@ -89,6 +90,22 @@ golang-1.18-minimal/build:
   variables:
     GOLANG_SELECTOR: "18"
 
+nodejs-16-minimal/build:
+  stage: build-2
+  extends:
+    - .docker
+    - .nodejs_minimal
+  variables:
+    NODEJS_SELECTOR: "16"
+
+nodejs-18-minimal/build:
+  stage: build-2
+  extends:
+    - .docker
+    - .nodejs_minimal
+  variables:
+    NODEJS_SELECTOR: "18"
+
 golang-1.17-full/build:
   stage: build-3
   extends:
@@ -108,3 +125,23 @@ golang-1.18-full/build:
     GOLANG_SELECTOR: "18"
   needs:
     - job: golang-1.18-minimal/build
+
+nodejs-16-full/build:
+  stage: build-3
+  extends:
+    - .docker
+    - .nodejs_full
+  variables:
+    NODEJS_SELECTOR: "16"
+  needs:
+    - job: nodejs-16-minimal/build
+
+nodejs-18-full/build:
+  stage: build-3
+  extends:
+    - .docker
+    - .nodejs_full
+  variables:
+    NODEJS_SELECTOR: "18"
+  needs:
+    - job: nodejs-18-minimal/build

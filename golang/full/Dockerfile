@@ -1,6 +1,6 @@
 ARG PARENT_TAG
 ARG GOLANG_SELECTOR
-FROM registry.gitlab.com/kisev/dockerfiles/golang-1.${GOLANG_SELECTOR}:${PARENT_TAG}
+FROM registry.gitlab.com/kisev/dockerfiles/golang-1.${GOLANG_SELECTOR}:${PARENT_TAG}-minimal
 
 ARG TARGETPLATFORM
 ARG TARGETOS

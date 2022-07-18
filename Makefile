@@ -28,6 +28,7 @@ lint: ## Run linters
 		--rm \
 		-e LOG_LEVEL="NOTICE" \
 		-e RUN_LOCAL="true" \
+		-e VALIDATE_NATURAL_LANGUAGE="false" \
 		-e IGNORE_GITIGNORED_FILES="true" \
 		-v "${PWD}":"/tmp/lint" \
 		ghcr.io/github/super-linter:slim-v4
