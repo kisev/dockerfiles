@@ -57,6 +57,22 @@ nginx/build:
   needs:
     - job: core/build
 
+terratools/build:
+  stage: build-2
+  extends:
+    - .docker
+  resource_group: terratools
+  variables:
+    DOCKER_EXTRA_ARGS: |
+      terratools
+      --file terratools/Dockerfile
+      --build-arg PARENT_TAG=${CI_COMMIT_REF_SLUG}
+      --tag ${CI_REGISTRY_IMAGE}/terratools:${CI_COMMIT_REF_SLUG}
+      --cache-from type=registry,ref=${CI_REGISTRY_IMAGE}/terratools-cache:${CI_COMMIT_REF_SLUG}
+      --cache-to type=registry,ref=${CI_REGISTRY_IMAGE}/terratools-cache:${CI_COMMIT_REF_SLUG},mode=max
+  needs:
+    - job: core/build
+
 golang-1.17-minimal/build:
   stage: build-2
   extends:

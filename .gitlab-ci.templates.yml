@@ -2,7 +2,7 @@
 .docker:
   image: docker:20
   services:
-    - name: docker:20-dind
+    - name: docker:20-dind-rootless
     - name: multiarch/qemu-user-static:latest
       command: ["--reset", "--persistent", "yes"]
   variables:
