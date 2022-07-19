@@ -78,3 +78,15 @@
       --tag ${CI_REGISTRY_IMAGE}/nodejs-${NODEJS_SELECTOR}:${CI_COMMIT_REF_SLUG}-full
       --cache-from type=registry,ref=${CI_REGISTRY_IMAGE}/nodejs-${NODEJS_SELECTOR}-full-cache:${CI_COMMIT_REF_SLUG}
       --cache-to type=registry,ref=${CI_REGISTRY_IMAGE}/nodejs-${NODEJS_SELECTOR}-full-cache:${CI_COMMIT_REF_SLUG},mode=max
+
+.python:
+  resource_group: python-${PYTHON_SELECTOR}
+  variables:
+    DOCKER_EXTRA_ARGS: |
+      python
+      --file python/Dockerfile
+      --build-arg PARENT_TAG=${CI_COMMIT_REF_SLUG}
+      --build-arg PYTHON_SELECTOR=${PYTHON_SELECTOR}
+      --tag ${CI_REGISTRY_IMAGE}/python-${PYTHON_SELECTOR}:${CI_COMMIT_REF_SLUG}
+      --cache-from type=registry,ref=${CI_REGISTRY_IMAGE}/python-${PYTHON_SELECTOR}-cache:${CI_COMMIT_REF_SLUG}
+      --cache-to type=registry,ref=${CI_REGISTRY_IMAGE}/python-${PYTHON_SELECTOR}-cache:${CI_COMMIT_REF_SLUG},mode=max

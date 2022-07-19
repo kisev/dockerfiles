@@ -90,6 +90,22 @@ kubetools/build:
   needs:
     - job: core/build
 
+python-3.9/build:
+  stage: build-2
+  extends:
+    - .docker
+    - .python
+  variables:
+    PYTHON_SELECTOR: "3_9"
+
+python-3.10/build:
+  stage: build-2
+  extends:
+    - .docker
+    - .python
+  variables:
+    PYTHON_SELECTOR: "3_10"
+
 golang-1.17-minimal/build:
   stage: build-2
   extends:
