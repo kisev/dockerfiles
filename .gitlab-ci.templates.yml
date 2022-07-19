@@ -26,7 +26,6 @@
       ${DOCKER_EXTRA_ARGS}
 
 .golang_minimal:
-  resource_group: golang-1.${GOLANG_SELECTOR}-minimal
   variables:
     DOCKER_EXTRA_ARGS: |
       golang/minimal
@@ -41,7 +40,6 @@
     - job: core/build
 
 .golang_full:
-  resource_group: golang-1.${GOLANG_SELECTOR}-full
   variables:
     DOCKER_EXTRA_ARGS: |
       golang/full
@@ -53,7 +51,6 @@
       --cache-to type=registry,ref=${CI_REGISTRY_IMAGE}/golang-1.${GOLANG_SELECTOR}-full-cache:${CI_COMMIT_REF_SLUG},mode=max
 
 .nodejs_minimal:
-  resource_group: nodejs-${NODEJS_SELECTOR}-minimal
   variables:
     DOCKER_EXTRA_ARGS: |
       nodejs/minimal
@@ -68,7 +65,6 @@
     - job: core/build
 
 .nodejs_full:
-  resource_group: nodejs-${NODEJS_SELECTOR}-full
   variables:
     DOCKER_EXTRA_ARGS: |
       nodejs/full
@@ -80,7 +76,6 @@
       --cache-to type=registry,ref=${CI_REGISTRY_IMAGE}/nodejs-${NODEJS_SELECTOR}-full-cache:${CI_COMMIT_REF_SLUG},mode=max
 
 .python:
-  resource_group: python-${PYTHON_SELECTOR}
   variables:
     DOCKER_EXTRA_ARGS: |
       python
