@@ -42,7 +42,7 @@ RUN <<-EOF
     rm -rf /var/lib/apt/lists/*
 EOF
 
-ARG PYTHON_SELECTOR="3_10"
+ARG PYTHON_SELECTOR="3.10"
 ARG PYTHON_3_9_VERSION="3.9.13"
 ARG PYTHON_3_9_SHA256SUM="829b0d26072a44689a6b0810f5b4a3933ee2a0b8a4bfc99d7c5893ffd4f97c44"
 ARG PYTHON_3_10_VERSION="3.10.5"
@@ -52,9 +52,9 @@ RUN <<-EOF
     echo "Install python"
 
     export ARCH="${TARGETARCH}"
-    export PYTHON_VERSION="PYTHON_${PYTHON_SELECTOR}_VERSION"
-    export PYTHON_BASE_VERSION=$(echo "${PYTHON_SELECTOR}" | tr _ .)
-    export SHA256SUM="PYTHON_${PYTHON_SELECTOR}_SHA256SUM"
+    export PYTHON_SELECTOR_ENV=$(echo "${PYTHON_SELECTOR}" | tr . _)
+    export PYTHON_VERSION="PYTHON_${PYTHON_SELECTOR_ENV}_VERSION"
+    export SHA256SUM="PYTHON_${PYTHON_SELECTOR_ENV}_SHA256SUM"
 
     curl -SLO "https://www.python.org/ftp/python/${!PYTHON_VERSION}/Python-${!PYTHON_VERSION}.tgz"
     echo "Downloaded SHA256: $(sha256sum Python-${!PYTHON_VERSION}.tgz)"
@@ -78,8 +78,8 @@ RUN <<-EOF
 
     rm -rf Python-${!PYTHON_VERSION}
 
-    ln -s /usr/local/bin/python${PYTHON_BASE_VERSION} /usr/local/bin/python
-    ln -s /usr/local/bin/python${PYTHON_BASE_VERSION}-config /usr/local/bin/python-config
+    ln -s /usr/local/bin/python${PYTHON_SELECTOR_ENV} /usr/local/bin/python
+    ln -s /usr/local/bin/python${PYTHON_SELECTOR_ENV}-config /usr/local/bin/python-config
 
     python --version
 EOF
