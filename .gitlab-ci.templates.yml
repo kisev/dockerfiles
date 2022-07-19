@@ -26,6 +26,12 @@
       ${DOCKER_EXTRA_ARGS}
 
 .golang_minimal:
+  rules:
+    - if: $PIPELINE_FORCE
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_MERGE_REQUEST_DIFF_ID == "1"
+      changes:
+        - core/**/*
+        - golang/minimal/**/*
   resource_group: golang-1.${GOLANG_SELECTOR}-minimal
   variables:
     DOCKER_EXTRA_ARGS: |
@@ -41,6 +47,13 @@
     - job: core/build
 
 .golang_full:
+  rules:
+    - if: $PIPELINE_FORCE
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_MERGE_REQUEST_DIFF_ID == "1"
+      changes:
+        - core/**/*
+        - golang/minimal/**/*
+        - golang/full/**/*
   resource_group: golang-1.${GOLANG_SELECTOR}-full
   variables:
     DOCKER_EXTRA_ARGS: |
@@ -53,6 +66,12 @@
       --cache-to type=registry,ref=${CI_REGISTRY_IMAGE}/golang-1.${GOLANG_SELECTOR}-full-cache:${CI_COMMIT_REF_SLUG},mode=max
 
 .nodejs_minimal:
+  rules:
+    - if: $PIPELINE_FORCE
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_MERGE_REQUEST_DIFF_ID == "1"
+      changes:
+        - core/**/*
+        - nodejs/minimal/**/*
   resource_group: nodejs-${NODEJS_SELECTOR}-minimal
   variables:
     DOCKER_EXTRA_ARGS: |
@@ -68,6 +87,13 @@
     - job: core/build
 
 .nodejs_full:
+  rules:
+    - if: $PIPELINE_FORCE
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_MERGE_REQUEST_DIFF_ID == "1"
+      changes:
+        - core/**/*
+        - nodejs/minimal/**/*
+        - nodejs/full/**/*
   resource_group: nodejs-${NODEJS_SELECTOR}-full
   variables:
     DOCKER_EXTRA_ARGS: |

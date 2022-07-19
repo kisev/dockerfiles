@@ -11,6 +11,14 @@ stages:
 default:
   interruptible: true
 
+debug:
+  stage: .pre
+  rules:
+    - if: $CI_MERGE_REQUEST_ID
+  script:
+    - env
+    - echo "${CI_MERGE_REQUEST_DIFF_ID}"
+
 github-superliner/lint:
   stage: lint
   image:
@@ -32,6 +40,11 @@ core/build:
   stage: build-1
   extends:
     - .docker
+  rules:
+    - if: $PIPELINE_FORCE
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_MERGE_REQUEST_DIFF_ID == "1"
+      changes:
+        - core/**/*
   resource_group: core
   variables:
     DOCKER_EXTRA_ARGS: |
@@ -46,6 +59,12 @@ nginx/build:
   stage: build-2
   extends:
     - .docker
+  rules:
+    - if: $PIPELINE_FORCE
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_MERGE_REQUEST_DIFF_ID == "1"
+      changes:
+        - core/**/*
+        - nginx/**/*
   resource_group: nginx
   variables:
     DOCKER_EXTRA_ARGS: |
@@ -62,6 +81,12 @@ terratools/build:
   stage: build-2
   extends:
     - .docker
+  rules:
+    - if: $PIPELINE_FORCE
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_MERGE_REQUEST_DIFF_ID == "1"
+      changes:
+        - core/**/*
+        - terratools/**/*
   resource_group: terratools
   variables:
     DOCKER_EXTRA_ARGS: |
@@ -78,6 +103,12 @@ kubetools/build:
   stage: build-2
   extends:
     - .docker
+  rules:
+    - if: $PIPELINE_FORCE
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_MERGE_REQUEST_DIFF_ID == "1"
+      changes:
+        - core/**/*
+        - kubetools/**/*
   resource_group: kubetools
   variables:
     DOCKER_EXTRA_ARGS: |
