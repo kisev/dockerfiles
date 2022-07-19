@@ -115,7 +115,7 @@ golang-1.17-minimal/build:
     - .golang_minimal
   resource_group: golang-1.17-minimal
   variables:
-    GOLANG_SELECTOR: "17"
+    GOLANG_SELECTOR: "1.17"
 
 golang-1.18-minimal/build:
   stage: build-2
@@ -124,7 +124,7 @@ golang-1.18-minimal/build:
     - .golang_minimal
   resource_group: golang-1.18-minimal
   variables:
-    GOLANG_SELECTOR: "18"
+    GOLANG_SELECTOR: "1.18"
 
 nodejs-16-minimal/build:
   stage: build-2
@@ -151,7 +151,7 @@ golang-1.17-full/build:
     - .golang_full
   resource_group: golang-1.17-full
   variables:
-    GOLANG_SELECTOR: "17"
+    GOLANG_SELECTOR: "1.17"
   needs:
     - job: golang-1.17-minimal/build
 
@@ -162,7 +162,7 @@ golang-1.18-full/build:
     - .golang_full
   resource_group: golang-1.18-full
   variables:
-    GOLANG_SELECTOR: "18"
+    GOLANG_SELECTOR: "1.18"
   needs:
     - job: golang-1.18-minimal/build
 

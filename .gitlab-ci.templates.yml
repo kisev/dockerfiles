@@ -32,10 +32,10 @@
       --file golang/minimal/Dockerfile
       --build-arg PARENT_TAG=${CI_COMMIT_REF_SLUG}
       --build-arg GOLANG_SELECTOR=${GOLANG_SELECTOR}
-      --tag ${CI_REGISTRY_IMAGE}/golang-1.${GOLANG_SELECTOR}:${CI_COMMIT_REF_SLUG}
-      --tag ${CI_REGISTRY_IMAGE}/golang-1.${GOLANG_SELECTOR}:${CI_COMMIT_REF_SLUG}-minimal
-      --cache-from type=registry,ref=${CI_REGISTRY_IMAGE}/golang-1.${GOLANG_SELECTOR}-minimal-cache:${CI_COMMIT_REF_SLUG}
-      --cache-to type=registry,ref=${CI_REGISTRY_IMAGE}/golang-1.${GOLANG_SELECTOR}-minimal-cache:${CI_COMMIT_REF_SLUG},mode=max
+      --tag ${CI_REGISTRY_IMAGE}/golang-${GOLANG_SELECTOR}:${CI_COMMIT_REF_SLUG}
+      --tag ${CI_REGISTRY_IMAGE}/golang-${GOLANG_SELECTOR}:${CI_COMMIT_REF_SLUG}-minimal
+      --cache-from type=registry,ref=${CI_REGISTRY_IMAGE}/golang-${GOLANG_SELECTOR}-minimal-cache:${CI_COMMIT_REF_SLUG}
+      --cache-to type=registry,ref=${CI_REGISTRY_IMAGE}/golang-${GOLANG_SELECTOR}-minimal-cache:${CI_COMMIT_REF_SLUG},mode=max
   needs:
     - job: core/build
 
@@ -46,9 +46,9 @@
       --file golang/full/Dockerfile
       --build-arg PARENT_TAG=${CI_COMMIT_REF_SLUG}
       --build-arg GOLANG_SELECTOR=${GOLANG_SELECTOR}
-      --tag ${CI_REGISTRY_IMAGE}/golang-1.${GOLANG_SELECTOR}:${CI_COMMIT_REF_SLUG}-full
-      --cache-from type=registry,ref=${CI_REGISTRY_IMAGE}/golang-1.${GOLANG_SELECTOR}-full-cache:${CI_COMMIT_REF_SLUG}
-      --cache-to type=registry,ref=${CI_REGISTRY_IMAGE}/golang-1.${GOLANG_SELECTOR}-full-cache:${CI_COMMIT_REF_SLUG},mode=max
+      --tag ${CI_REGISTRY_IMAGE}/golang-${GOLANG_SELECTOR}:${CI_COMMIT_REF_SLUG}-full
+      --cache-from type=registry,ref=${CI_REGISTRY_IMAGE}/golang-${GOLANG_SELECTOR}-full-cache:${CI_COMMIT_REF_SLUG}
+      --cache-to type=registry,ref=${CI_REGISTRY_IMAGE}/golang-${GOLANG_SELECTOR}-full-cache:${CI_COMMIT_REF_SLUG},mode=max
 
 .nodejs_minimal:
   variables:
