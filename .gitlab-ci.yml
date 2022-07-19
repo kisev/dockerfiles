@@ -74,6 +74,22 @@ terratools/build:
   needs:
     - job: core/build
 
+kubetools/build:
+  stage: build-2
+  extends:
+    - .docker
+  resource_group: kubetools
+  variables:
+    DOCKER_EXTRA_ARGS: |
+      kubetools
+      --file kubetools/Dockerfile
+      --build-arg PARENT_TAG=${CI_COMMIT_REF_SLUG}
+      --tag ${CI_REGISTRY_IMAGE}/kubetools:${CI_COMMIT_REF_SLUG}
+      --cache-from type=registry,ref=${CI_REGISTRY_IMAGE}/kubetools-cache:${CI_COMMIT_REF_SLUG}
+      --cache-to type=registry,ref=${CI_REGISTRY_IMAGE}/kubetools-cache:${CI_COMMIT_REF_SLUG},mode=max
+  needs:
+    - job: core/build
+
 golang-1.17-minimal/build:
   stage: build-2
   extends:
