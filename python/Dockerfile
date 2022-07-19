@@ -78,8 +78,8 @@ RUN <<-EOF
 
     rm -rf Python-${!PYTHON_VERSION}
 
-    ln -s /usr/local/bin/python${PYTHON_SELECTOR_ENV} /usr/local/bin/python
-    ln -s /usr/local/bin/python${PYTHON_SELECTOR_ENV}-config /usr/local/bin/python-config
+    ln -s /usr/local/bin/python${PYTHON_SELECTOR} /usr/local/bin/python
+    ln -s /usr/local/bin/python${PYTHON_SELECTOR}-config /usr/local/bin/python-config
 
     python --version
 EOF
