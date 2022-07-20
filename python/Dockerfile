@@ -1,5 +1,5 @@
 ARG PARENT_TAG
-FROM registry.gitlab.com/kisev/dockerfiles/core:${PARENT_TAG}
+FROM registry.gitlab.com/kisev/dockerfiles/core:${PARENT_TAG} AS build
 
 ARG TARGETPLATFORM
 ARG TARGETOS
@@ -12,7 +12,7 @@ ARG BUILDVARIANT
 
 SHELL ["/bin/bash", "-euo", "pipefail", "-c"]
 
-WORKDIR /app
+WORKDIR /build
 
 # hadolint ignore=DL3008
 RUN <<-EOF
@@ -67,21 +67,36 @@ RUN <<-EOF
 
     ./configure \
       --build="${ARCH}" \
+      --prefix=/build/python \
       --enable-loadable-sqlite-extensions \
       --enable-optimizations \
       --with-lto \
       --with-ensurepip=no
 
-    make -j "$(nproc)" altinstall
+    make -j "$(nproc)" install
 
     cd ..
 
     rm -rf Python-${!PYTHON_VERSION}
+EOF
 
+
+ARG PARENT_TAG
+FROM registry.gitlab.com/kisev/dockerfiles/core:${PARENT_TAG}
+
+SHELL ["/bin/bash", "-euo", "pipefail", "-c"]
+
+WORKDIR /app
+
+COPY --from=build /build/python /usr/local
+
+ARG PYTHON_SELECTOR="3.10"
+RUN <<-EOF
     ln -s /usr/local/bin/python${PYTHON_SELECTOR} /usr/local/bin/python
     ln -s /usr/local/bin/python${PYTHON_SELECTOR}-config /usr/local/bin/python-config
 
     python --version
+    ldd /usr/local/bin/python
 EOF
 
 ARG GETPIP_VERSION="22.1.2"
