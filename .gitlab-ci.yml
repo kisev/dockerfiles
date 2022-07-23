@@ -90,6 +90,15 @@ kubetools/build:
   needs:
     - job: core/build
 
+python-3.8/build:
+  stage: build-2
+  extends:
+    - .docker
+    - .python
+  resource_group: python-3.8
+  variables:
+    PYTHON_SELECTOR: "3.8"
+
 python-3.9/build:
   stage: build-2
   extends:

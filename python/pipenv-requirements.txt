@@ -1,0 +1,29 @@
+pipenv == 2022.7.4 \
+    --hash=sha256:55c35a1742d568bb0e521099c5fd7bfd373d41f088160f4ffdd4e6e703d0fd3b
+
+certifi == 2022.6.15 \
+    --hash=sha256:fe86415d55e84719d75f8b69414f6438ac3547d2078ab91b67e779ef69378412
+
+virtualenv == 20.15.1 \
+    --hash=sha256:b30aefac647e86af6d82bfc944c556f8f1a9c90427b2fb4e3bfbf338cb82becf
+
+virtualenv-clone == 0.2.5 \
+    --hash=sha256:7087ba4eb48acfd5209a3fd03e15d072f28742619127c98333057e32748d91c4
+
+filelock == 3.7.1 \
+    --hash=sha256:37def7b658813cda163b56fc564cdc75e86d338246458c4c28ae84cabefa2404
+
+platformdirs == 2.5.2 \
+    --hash=sha256:027d8e83a2d7de06bbac4e5ef7e023c02b863d7ea5d079477e722bb41ab25788
+
+distlib == 0.3.5 \
+    --hash=sha256:b710088c59f06338ca514800ad795a132da19fda270e3ce4affc74abf955a26c
+
+six == 1.16.0 \
+    --hash=sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254
+
+setuptools == 63.2.0 \
+    --hash=sha256:0d33c374d41c7863419fc8f6c10bfe25b7b498aa34164d135c622e52580c6b16
+
+wheel == 0.37.1 \
+    --hash=sha256:4bdcd7d840138086126cd09254dc6195fb4fc6f01c050a1d7236f2630db1d22a
