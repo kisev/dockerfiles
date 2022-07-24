@@ -117,21 +117,21 @@ python-3.10/build:
   variables:
     PYTHON_SELECTOR: "3.10"
 
-golang-1.17-minimal/build:
+golang-1.17/build:
   stage: build-2
   extends:
     - .docker
-    - .golang_minimal
-  resource_group: golang-1.17-minimal
+    - .golang
+  resource_group: golang-1.17
   variables:
     GOLANG_SELECTOR: "1.17"
 
-golang-1.18-minimal/build:
+golang-1.18/build:
   stage: build-2
   extends:
     - .docker
-    - .golang_minimal
-  resource_group: golang-1.18-minimal
+    - .golang
+  resource_group: golang-1.18
   variables:
     GOLANG_SELECTOR: "1.18"
 
@@ -161,25 +161,3 @@ nodejs-18/build:
   resource_group: nodejs-18
   variables:
     NODEJS_SELECTOR: "18"
-
-golang-1.17-full/build:
-  stage: build-3
-  extends:
-    - .docker
-    - .golang_full
-  resource_group: golang-1.17-full
-  variables:
-    GOLANG_SELECTOR: "1.17"
-  needs:
-    - job: golang-1.17-minimal/build
-
-golang-1.18-full/build:
-  stage: build-3
-  extends:
-    - .docker
-    - .golang_full
-  resource_group: golang-1.18-full
-  variables:
-    GOLANG_SELECTOR: "1.18"
-  needs:
-    - job: golang-1.18-minimal/build
