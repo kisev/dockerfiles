@@ -135,21 +135,30 @@ golang-1.18-minimal/build:
   variables:
     GOLANG_SELECTOR: "1.18"
 
-nodejs-16-minimal/build:
+nodejs-14/build:
   stage: build-2
   extends:
     - .docker
-    - .nodejs_minimal
-  resource_group: nodejs-16-minimal
+    - .nodejs
+  resource_group: nodejs-14
+  variables:
+    NODEJS_SELECTOR: "14"
+
+nodejs-16/build:
+  stage: build-2
+  extends:
+    - .docker
+    - .nodejs
+  resource_group: nodejs-16
   variables:
     NODEJS_SELECTOR: "16"
 
-nodejs-18-minimal/build:
+nodejs-18/build:
   stage: build-2
   extends:
     - .docker
-    - .nodejs_minimal
-  resource_group: nodejs-18-minimal
+    - .nodejs
+  resource_group: nodejs-18
   variables:
     NODEJS_SELECTOR: "18"
 
@@ -174,25 +183,3 @@ golang-1.18-full/build:
     GOLANG_SELECTOR: "1.18"
   needs:
     - job: golang-1.18-minimal/build
-
-nodejs-16-full/build:
-  stage: build-3
-  extends:
-    - .docker
-    - .nodejs_full
-  resource_group: nodejs-16-full
-  variables:
-    NODEJS_SELECTOR: "16"
-  needs:
-    - job: nodejs-16-minimal/build
-
-nodejs-18-full/build:
-  stage: build-3
-  extends:
-    - .docker
-    - .nodejs_full
-  resource_group: nodejs-18-full
-  variables:
-    NODEJS_SELECTOR: "18"
-  needs:
-    - job: nodejs-18-minimal/build

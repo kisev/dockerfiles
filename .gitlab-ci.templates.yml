@@ -50,30 +50,18 @@
       --cache-from type=registry,ref=${CI_REGISTRY_IMAGE}/golang-${GOLANG_SELECTOR}-full-cache:${CI_COMMIT_REF_SLUG}
       --cache-to type=registry,ref=${CI_REGISTRY_IMAGE}/golang-${GOLANG_SELECTOR}-full-cache:${CI_COMMIT_REF_SLUG},mode=max
 
-.nodejs_minimal:
+.nodejs:
   variables:
     DOCKER_EXTRA_ARGS: |
-      nodejs/minimal
-      --file nodejs/minimal/Dockerfile
+      nodejs
+      --file nodejs/Dockerfile
       --build-arg PARENT_TAG=${CI_COMMIT_REF_SLUG}
       --build-arg NODEJS_SELECTOR=${NODEJS_SELECTOR}
       --tag ${CI_REGISTRY_IMAGE}/nodejs-${NODEJS_SELECTOR}:${CI_COMMIT_REF_SLUG}
-      --tag ${CI_REGISTRY_IMAGE}/nodejs-${NODEJS_SELECTOR}:${CI_COMMIT_REF_SLUG}-minimal
-      --cache-from type=registry,ref=${CI_REGISTRY_IMAGE}/nodejs-${NODEJS_SELECTOR}-minimal-cache:${CI_COMMIT_REF_SLUG}
-      --cache-to type=registry,ref=${CI_REGISTRY_IMAGE}/nodejs-${NODEJS_SELECTOR}-minimal-cache:${CI_COMMIT_REF_SLUG},mode=max
+      --cache-from type=registry,ref=${CI_REGISTRY_IMAGE}/nodejs-${NODEJS_SELECTOR}-cache:${CI_COMMIT_REF_SLUG}
+      --cache-to type=registry,ref=${CI_REGISTRY_IMAGE}/nodejs-${NODEJS_SELECTOR}-cache:${CI_COMMIT_REF_SLUG},mode=max
   needs:
     - job: core/build
-
-.nodejs_full:
-  variables:
-    DOCKER_EXTRA_ARGS: |
-      nodejs/full
-      --file nodejs/full/Dockerfile
-      --build-arg PARENT_TAG=${CI_COMMIT_REF_SLUG}
-      --build-arg NODEJS_SELECTOR=${NODEJS_SELECTOR}
-      --tag ${CI_REGISTRY_IMAGE}/nodejs-${NODEJS_SELECTOR}:${CI_COMMIT_REF_SLUG}-full
-      --cache-from type=registry,ref=${CI_REGISTRY_IMAGE}/nodejs-${NODEJS_SELECTOR}-full-cache:${CI_COMMIT_REF_SLUG}
-      --cache-to type=registry,ref=${CI_REGISTRY_IMAGE}/nodejs-${NODEJS_SELECTOR}-full-cache:${CI_COMMIT_REF_SLUG},mode=max
 
 .python:
   variables:
