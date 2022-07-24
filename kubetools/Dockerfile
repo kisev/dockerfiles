@@ -63,18 +63,18 @@ RUN <<-EOF
     echo "Downloaded SHA256: $(sha256sum helm-${HELM_VERSION}-linux-${ARCH}.tar.gz)"
     echo "${!SHA256SUM} helm-${HELM_VERSION}-linux-${ARCH}.tar.gz" | sha256sum -c -
 
-    tar -xzf helm-${HELM_VERSION}-linux-${ARCH}.tar.gz
-    rm -rf helm-${HELM_VERSION}-linux-${ARCH}.tar.gz
+    tar -xzf "helm-${HELM_VERSION}-linux-${ARCH}.tar.gz"
+    rm -rf "helm-${HELM_VERSION}-linux-${ARCH}.tar.gz"
 
-    mv linux-${ARCH}/helm /usr/local/bin/helm
-    rm -rf linux-${ARCH}
+    mv "linux-${ARCH}/helm" /usr/local/bin/helm
+    rm -rf "linux-${ARCH}"
 
     chmod +x /usr/local/bin/helm
 
     helm version
 
-    helm plugin install https://github.com/jkroepke/helm-secrets --version ${HELM_PLUGIN_SECRETS_VERSION}
-    helm plugin install https://github.com/databus23/helm-diff --version ${HELM_PLUGIN_DIFF_VERSION}
+    helm plugin install https://github.com/jkroepke/helm-secrets --version "${HELM_PLUGIN_SECRETS_VERSION}"
+    helm plugin install https://github.com/databus23/helm-diff --version "${HELM_PLUGIN_DIFF_VERSION}"
 EOF
 
 ARG HELMFILE_VERSION="0.145.2"
@@ -90,8 +90,8 @@ RUN <<-EOF
     echo "Downloaded SHA256: $(sha256sum helmfile_${HELMFILE_VERSION}_linux_${ARCH}.tar.gz)"
     echo "${!SHA256SUM} helmfile_${HELMFILE_VERSION}_linux_${ARCH}.tar.gz" | sha256sum -c -
 
-    tar -xzf helmfile_${HELMFILE_VERSION}_linux_${ARCH}.tar.gz
-    rm -f helmfile_${HELMFILE_VERSION}_linux_${ARCH}.tar.gz
+    tar -xzf "helmfile_${HELMFILE_VERSION}_linux_${ARCH}.tar.gz"
+    rm -f "helmfile_${HELMFILE_VERSION}_linux_${ARCH}.tar.gz"
 
     mv helmfile /usr/local/bin/helmfile
     chmod +x /usr/local/bin/helmfile
@@ -112,8 +112,8 @@ RUN <<-EOF
     echo "Downloaded SHA256: $(sha256sum helmwave_${HELMWAVE_VERSION}_linux_${ARCH}.tar.gz)"
     echo "${!SHA256SUM} helmwave_${HELMWAVE_VERSION}_linux_${ARCH}.tar.gz" | sha256sum -c -
 
-    tar -xzf helmwave_${HELMWAVE_VERSION}_linux_${ARCH}.tar.gz
-    rm -f helmwave_${HELMWAVE_VERSION}_linux_${ARCH}.tar.gz
+    tar -xzf "helmwave_${HELMWAVE_VERSION}_linux_${ARCH}.tar.gz"
+    rm -f "helmwave_${HELMWAVE_VERSION}_linux_${ARCH}.tar.gz"
 
     mv helmwave /usr/local/bin/helmwave
     chmod +x /usr/local/bin/helmwave
@@ -134,7 +134,7 @@ RUN <<-EOF
     echo "Downloaded SHA256: $(sha256sum linkerd2-cli-stable-${LINKERD_VERSION}-linux-${ARCH})"
     echo "${!SHA256SUM} linkerd2-cli-stable-${LINKERD_VERSION}-linux-${ARCH}" | sha256sum -c -
 
-    mv linkerd2-cli-stable-${LINKERD_VERSION}-linux-${ARCH} /usr/local/bin/linkerd
+    mv "linkerd2-cli-stable-${LINKERD_VERSION}-linux-${ARCH}" /usr/local/bin/linkerd
     chmod +x /usr/local/bin/linkerd
 
     linkerd version --client
@@ -153,7 +153,7 @@ RUN <<-EOF
     echo "Downloaded SHA256: $(sha256sum sops-${SOPS_VERSION}.linux.${ARCH})"
     echo "${!SHA256SUM} sops-${SOPS_VERSION}.linux.${ARCH}" | sha256sum -c -
 
-    mv sops-${SOPS_VERSION}.linux.${ARCH} /usr/local/bin/sops
+    mv "sops-${SOPS_VERSION}.linux.${ARCH}" /usr/local/bin/sops
     chmod +x /usr/local/bin/sops
 
     sops --version

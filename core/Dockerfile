@@ -48,14 +48,14 @@ ARG CORE_DUMB_INIT_SHA256SUM_aarch64="b7d648f97154a99c539b63c55979cd29f005f88430
 RUN <<-EOF
     echo "Install dumb-init"
 
-    export ARCH=$(uname -m)
+    export ARCH="$(uname -m)"
     export SHA256SUM="CORE_DUMB_INIT_SHA256SUM_${ARCH}"
 
     curl -SLO "https://github.com/Yelp/dumb-init/releases/download/v${CORE_DUMB_INIT_VERSION}/dumb-init_${CORE_DUMB_INIT_VERSION}_${ARCH}"
     echo "Downloaded SHA256: $(sha256sum dumb-init_${CORE_DUMB_INIT_VERSION}_${ARCH})"
     echo "${!SHA256SUM} dumb-init_${CORE_DUMB_INIT_VERSION}_${ARCH}" | sha256sum -c -
 
-    mv dumb-init_${CORE_DUMB_INIT_VERSION}_${ARCH} /usr/local/bin/dumb-init
+    mv "dumb-init_${CORE_DUMB_INIT_VERSION}_${ARCH}" /usr/local/bin/dumb-init
     chmod +x /usr/local/bin/dumb-init
 
     dumb-init --version
@@ -74,7 +74,7 @@ RUN <<-EOF
     echo "Downloaded SHA256: $(sha256sum gosu-${ARCH})"
     echo "${!SHA256SUM} gosu-${ARCH}" | sha256sum -c -
 
-    mv gosu-${ARCH} /usr/local/bin/gosu
+    mv "gosu-${ARCH}" /usr/local/bin/gosu
     chmod +x /usr/local/bin/gosu
 
     gosu --version

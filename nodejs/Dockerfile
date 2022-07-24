@@ -45,7 +45,7 @@ RUN <<-EOF
 
     ln -s /usr/local/bin/node /usr/local/bin/nodejs
 
-    rm -f node-${!NODEJS_VERSION}-linux-${ARCH}.tar.xz
+    rm -f "node-${!NODEJS_VERSION}-linux-${ARCH}.tar.xz"
 
     node --version
     npm --version
@@ -59,7 +59,7 @@ RUN <<-EOF
 
     corepack enable pnpm
 
-    corepack prepare --activate pnpm@${PNPM_VERSION}
+    corepack prepare --activate "pnpm@${PNPM_VERSION}"
 
     echo "Downloaded pnpm SHA256: $(sha256sum /usr/local/lib/node_modules/corepack/dist/pnpm.js)"
     echo "${PNPM_SHA256SUM} /usr/local/lib/node_modules/corepack/dist/pnpm.js" | sha256sum -c -
@@ -78,7 +78,7 @@ RUN <<-EOF
 
     corepack enable yarn
 
-    corepack prepare --activate yarn@${YARN_VERSION}
+    corepack prepare --activate "yarn@${YARN_VERSION}"
 
     echo "Downloaded yarn SHA256: $(sha256sum /usr/local/lib/node_modules/corepack/dist/yarn.js)"
     echo "${YARN_SHA256SUM} /usr/local/lib/node_modules/corepack/dist/yarn.js" | sha256sum -c -

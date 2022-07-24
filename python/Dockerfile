@@ -81,7 +81,7 @@ RUN <<-EOF
         python${PYTHON_SELECTOR}-dev
     fi
 
-    export PYTHON_SELECTOR_ENV=$(echo "${PYTHON_SELECTOR}" | tr . _)
+    export PYTHON_SELECTOR_ENV="$(echo "${PYTHON_SELECTOR}" | tr . _)"
     export PYTHON_VERSION="PYTHON_${PYTHON_SELECTOR_ENV}_VERSION"
     export SHA256SUM="PYTHON_${PYTHON_SELECTOR_ENV}_SHA256SUM"
 
@@ -89,8 +89,8 @@ RUN <<-EOF
     echo "Downloaded SHA256: $(sha256sum Python-${!PYTHON_VERSION}.tgz)"
     echo "${!SHA256SUM} Python-${!PYTHON_VERSION}.tgz" | sha256sum -c -
 
-    tar -xzf Python-${!PYTHON_VERSION}.tgz
-    rm -f Python-${!PYTHON_VERSION}.tgz
+    tar -xzf "Python-${!PYTHON_VERSION}.tgz"
+    rm -f "Python-${!PYTHON_VERSION}.tgz"
 
     cd Python-${!PYTHON_VERSION}
 
@@ -121,9 +121,9 @@ RUN <<-EOF
 
     cd ..
 
-    rm -rf Python-${!PYTHON_VERSION}
+    rm -rf "Python-${!PYTHON_VERSION}"
 
-    file /build/python/bin/python${PYTHON_SELECTOR}
+    file "/build/python/bin/python${PYTHON_SELECTOR}"
 EOF
 
 
@@ -140,8 +140,8 @@ COPY --from=build /build/python /usr/local
 
 ARG PYTHON_SELECTOR="3.10"
 RUN <<-EOF
-    ln -s /usr/local/bin/python${PYTHON_SELECTOR} /usr/local/bin/python
-    ln -s /usr/local/bin/python${PYTHON_SELECTOR}-config /usr/local/bin/python-config
+    ln -s "/usr/local/bin/python${PYTHON_SELECTOR}" /usr/local/bin/python
+    ln -s "/usr/local/bin/python${PYTHON_SELECTOR}-config" /usr/local/bin/python-config
 
     python --version
     ldd /usr/local/bin/python

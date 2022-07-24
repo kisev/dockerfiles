@@ -26,7 +26,7 @@ RUN <<-EOF
     echo "Install golang"
 
     export ARCH="${TARGETARCH}"
-    export GOLANG_SELECTOR_ENV=$(echo "${GOLANG_SELECTOR}" | tr . _)
+    export GOLANG_SELECTOR_ENV="$(echo "${GOLANG_SELECTOR}" | tr . _)"
     export SHA256SUM="GOLANG_${GOLANG_SELECTOR_ENV}_SHA256SUM_${ARCH}"
     export GOLANG_VERSION="GOLANG_${GOLANG_SELECTOR_ENV}_VERSION"
 
@@ -34,8 +34,8 @@ RUN <<-EOF
     echo "Downloaded SHA256: $(sha256sum go${!GOLANG_VERSION}.linux-${ARCH}.tar.gz)"
     echo "${!SHA256SUM} go${!GOLANG_VERSION}.linux-${ARCH}.tar.gz" | sha256sum -c -
 
-    tar -C /usr/local -xzf go${!GOLANG_VERSION}.linux-${ARCH}.tar.gz
-    rm -f go${!GOLANG_VERSION}.linux-${ARCH}.tar.gz
+    tar -C /usr/local -xzf "go${!GOLANG_VERSION}.linux-${ARCH}.tar.gz"
+    rm -f "go${!GOLANG_VERSION}.linux-${ARCH}.tar.gz"
 
     go version
 EOF
@@ -54,10 +54,10 @@ RUN <<-EOF
     echo "${!SHA256SUM} gotestsum_${GOTESTSUM_VERSION}_linux_${ARCH}.tar.gz" | sha256sum -c -
 
     mkdir /tmp/gotestsum
-    tar -C /tmp/gotestsum -xzf gotestsum_${GOTESTSUM_VERSION}_linux_${ARCH}.tar.gz
+    tar -C /tmp/gotestsum -xzf "gotestsum_${GOTESTSUM_VERSION}_linux_${ARCH}.tar.gz"
     mv /tmp/gotestsum/gotestsum /usr/local/bin/gotestsum
     rm -rf /tmp/gotestsum
-    rm -f gotestsum_${GOTESTSUM_VERSION}_linux_${ARCH}.tar.gz
+    rm -f "gotestsum_${GOTESTSUM_VERSION}_linux_${ARCH}.tar.gz"
 
     gotestsum --version
 EOF
@@ -71,11 +71,11 @@ RUN <<-EOF
     echo "Install gocover-cobertura"
 
     export ARCH="${TARGETARCH}"
-    GOLANG_SELECTOR_ENV=$(echo "${GOLANG_SELECTOR}" | tr . _)
+    GOLANG_SELECTOR_ENV="$(echo "${GOLANG_SELECTOR}" | tr . _)"
     export GOLANG_SELECTOR_ENV
     export SHA256SUM="GOCOVER_COBERTURA_${GOLANG_SELECTOR_ENV}_SHA256SUM_${ARCH}"
 
-    go install github.com/boumenot/gocover-cobertura@${GOCOVER_COBERTURA_VERSION}
+    go install "github.com/boumenot/gocover-cobertura@${GOCOVER_COBERTURA_VERSION}"
 
     echo "Builded SHA256: $(sha256sum /go/bin/gocover-cobertura)"
     echo "${!SHA256SUM} /go/bin/gocover-cobertura" | sha256sum -c -
