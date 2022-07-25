@@ -61,3 +61,5 @@
       --tag ${CI_REGISTRY_IMAGE}/python-${PYTHON_SELECTOR}:${CI_COMMIT_REF_SLUG}
       --cache-from type=registry,ref=${CI_REGISTRY_IMAGE}/python-${PYTHON_SELECTOR}-cache:${CI_COMMIT_REF_SLUG}
       --cache-to type=registry,ref=${CI_REGISTRY_IMAGE}/python-${PYTHON_SELECTOR}-cache:${CI_COMMIT_REF_SLUG},mode=max
+  needs:
+    - job: core/build
