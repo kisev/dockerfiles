@@ -11,6 +11,28 @@ stages:
 default:
   interruptible: true
 
+trivy-fs/lint:
+  stage: lint
+  image:
+    name: docker.io/aquasec/trivy:latest
+    entrypoint: [ "" ]
+  variables:
+    TRIVY_NO_PROGRESS: "true"
+    TRIVY_CACHE_DIR: ".trivycache/"
+  script:
+    - trivy --version
+    # cache cleanup is needed when scanning images with the same tags, it does not remove the database
+    - time trivy image --clear-cache
+    # update vulnerabilities db
+    - time trivy image --download-db-only
+    # Prints full report
+    - trivy fs --exit-code 0 .
+    # Fail on critical vulnerabilities
+    - trivy fs --exit-code 1 --severity CRITICAL .
+  cache:
+    paths:
+      - .trivycache/
+
 github-superliner/lint:
   stage: lint
   image:
