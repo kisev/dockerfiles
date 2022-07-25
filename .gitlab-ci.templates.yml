@@ -63,3 +63,16 @@
       --cache-to type=registry,ref=${CI_REGISTRY_IMAGE}/python-${PYTHON_SELECTOR}-cache:${CI_COMMIT_REF_SLUG},mode=max
   needs:
     - job: core/build
+
+.ansible:
+  variables:
+    DOCKER_EXTRA_ARGS: |
+      ansible
+      --file ansible/Dockerfile
+      --build-arg PARENT_TAG=${CI_COMMIT_REF_SLUG}
+      --build-arg ANSIBLE_SELECTOR=${ANSIBLE_SELECTOR}
+      --tag ${CI_REGISTRY_IMAGE}/ansible-${ANSIBLE_SELECTOR}:${CI_COMMIT_REF_SLUG}
+      --cache-from type=registry,ref=${CI_REGISTRY_IMAGE}/ansible-${ANSIBLE_SELECTOR}-cache:${CI_COMMIT_REF_SLUG}
+      --cache-to type=registry,ref=${CI_REGISTRY_IMAGE}/ansible-${ANSIBLE_SELECTOR}-cache:${CI_COMMIT_REF_SLUG},mode=max
+  needs:
+    - job: python-3.10/build

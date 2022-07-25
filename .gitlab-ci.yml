@@ -161,3 +161,48 @@ nodejs-18/build:
   resource_group: nodejs-18
   variables:
     NODEJS_SELECTOR: "18"
+
+ansible-core-2.11/build:
+  stage: build-3
+  extends:
+    - .docker
+    - .ansible
+  resource_group: ansible-core-2.11
+  variables:
+    ANSIBLE_SELECTOR: "core-2.11"
+
+ansible-core-2.12/build:
+  stage: build-3
+  extends:
+    - .docker
+    - .ansible
+  resource_group: ansible-core-2.12
+  variables:
+    ANSIBLE_SELECTOR: "core-2.12"
+
+ansible-core-2.13/build:
+  stage: build-3
+  extends:
+    - .docker
+    - .ansible
+  resource_group: ansible-core-2.13
+  variables:
+    ANSIBLE_SELECTOR: "core-2.13"
+
+ansible-5/build:
+  stage: build-3
+  extends:
+    - .docker
+    - .ansible
+  resource_group: ansible-5
+  variables:
+    ANSIBLE_SELECTOR: "5"
+
+ansible-6/build:
+  stage: build-3
+  extends:
+    - .docker
+    - .ansible
+  resource_group: ansible-6
+  variables:
+    ANSIBLE_SELECTOR: "6"
