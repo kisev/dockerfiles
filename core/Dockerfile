@@ -41,7 +41,8 @@ ARG CORE_DUMB_INIT_SHA256SUM_aarch64="b7d648f97154a99c539b63c55979cd29f005f88430
 RUN <<-EOF
     echo "Install dumb-init"
 
-    export ARCH="$(uname -m)"
+    ARCH="$(uname -m)"
+    export ARCH
     export SHA256SUM="CORE_DUMB_INIT_SHA256SUM_${ARCH}"
 
     curl -SLO "https://github.com/Yelp/dumb-init/releases/download/v${CORE_DUMB_INIT_VERSION}/dumb-init_${CORE_DUMB_INIT_VERSION}_${ARCH}"

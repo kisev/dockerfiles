@@ -74,7 +74,8 @@ RUN <<-EOF
         python${PYTHON_SELECTOR}-dev
     fi
 
-    export PYTHON_SELECTOR_ENV="$(echo "${PYTHON_SELECTOR}" | tr . _)"
+    PYTHON_SELECTOR_ENV="$(echo "${PYTHON_SELECTOR}" | tr . _)"
+    export PYTHON_SELECTOR_ENV
     export PYTHON_VERSION="PYTHON_${PYTHON_SELECTOR_ENV}_VERSION"
     export SHA256SUM="PYTHON_${PYTHON_SELECTOR_ENV}_SHA256SUM"
 

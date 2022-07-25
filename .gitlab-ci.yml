@@ -64,6 +64,22 @@ core/build:
       --cache-from type=registry,ref=${CI_REGISTRY_IMAGE}/core-cache:${CI_COMMIT_REF_SLUG}
       --cache-to type=registry,ref=${CI_REGISTRY_IMAGE}/core-cache:${CI_COMMIT_REF_SLUG},mode=max
 
+docker/build:
+  stage: build-2
+  extends:
+    - .docker
+  resource_group: docker
+  variables:
+    DOCKER_EXTRA_ARGS: |
+      docker
+      --file docker/Dockerfile
+      --build-arg PARENT_TAG=${CI_COMMIT_REF_SLUG}
+      --tag ${CI_REGISTRY_IMAGE}/docker:${CI_COMMIT_REF_SLUG}
+      --cache-from type=registry,ref=${CI_REGISTRY_IMAGE}/docker-cache:${CI_COMMIT_REF_SLUG}
+      --cache-to type=registry,ref=${CI_REGISTRY_IMAGE}/docker-cache:${CI_COMMIT_REF_SLUG},mode=max
+  needs:
+    - job: core/build
+
 nginx/build:
   stage: build-2
   extends:

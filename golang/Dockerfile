@@ -19,7 +19,8 @@ RUN <<-EOF
     echo "Install golang"
 
     export ARCH="${TARGETARCH}"
-    export GOLANG_SELECTOR_ENV="$(echo "${GOLANG_SELECTOR}" | tr . _)"
+    GOLANG_SELECTOR_ENV="$(echo "${GOLANG_SELECTOR}" | tr . _)"
+    export GOLANG_SELECTOR_ENV
     export SHA256SUM="GOLANG_${GOLANG_SELECTOR_ENV}_SHA256SUM_${ARCH}"
     export GOLANG_VERSION="GOLANG_${GOLANG_SELECTOR_ENV}_VERSION"
 
