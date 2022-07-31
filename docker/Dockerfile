@@ -47,3 +47,35 @@ RUN <<-EOF
 
     docker --version
 EOF
+
+ARG TARGETARCH
+
+ARG TRIVY_VERSION="0.30.4"
+ARG TRIVY_SHA256SUM_64bit="bf4fbf5c1c8179460070dce909dec93cf61dfbbf917f49a16ea336d1f66f3727"
+ARG TRIVY_SHA256SUM_ARM64="40ce50eaaf6c4f5191c71c31ea31d40b41dc3298439d7c6b00b40ce311809758"
+RUN <<-EOF
+    echo "Install trivy"
+
+    if [ "${TARGETARCH}" == "amd64" ]; then
+      export ARCH="64bit"
+    elif [ "${TARGETARCH}" == "arm64" ]; then
+      export ARCH="ARM64"
+    fi
+
+    export SHA256SUM="TRIVY_SHA256SUM_${ARCH}"
+
+    curl -SLO "https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}/trivy_${TRIVY_VERSION}_Linux-${ARCH}.tar.gz"
+    echo "Downloaded SHA256: $(sha256sum trivy_${TRIVY_VERSION}_Linux-${ARCH}.tar.gz)"
+    echo "${!SHA256SUM} trivy_${TRIVY_VERSION}_Linux-${ARCH}.tar.gz" | sha256sum -c -
+
+    mkdir /tmp/trivy
+    tar -xzf "trivy_${TRIVY_VERSION}_Linux-${ARCH}.tar.gz" -C /tmp/trivy
+    rm -rf "trivy_${TRIVY_VERSION}_Linux-${ARCH}.tar.gz"
+
+    mv /tmp/trivy/trivy /usr/local/bin/trivy
+    rm -rf /tmp/trivy
+
+    chmod +x /usr/local/bin/trivy
+
+    trivy --version
+EOF
